@@ -1,0 +1,15 @@
+.width100 {
+  width: 100%;
+}
+
+.absolute-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
