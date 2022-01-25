@@ -11,8 +11,9 @@ export const parseUserData = (userData) => {
     const areaId = item?.area_id;
     const existingData = processedData[ areaId ];
     processedData[ areaId ] = processEachItem(item, existingData);
-  })
+  });
 
+  console.log(processedData)
   return processedData;
 }
 

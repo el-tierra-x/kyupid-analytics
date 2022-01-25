@@ -8,6 +8,11 @@
   align-items: center;
 }
 
+.MainHeading {
+  text-align: left;
+  margin-left: 50px;
+}
+
 
 .leaflet-container {
   width: 100%;

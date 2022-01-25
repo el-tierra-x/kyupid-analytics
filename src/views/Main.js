@@ -8,7 +8,7 @@ class Main extends React.PureComponent {
   render() {
     return (
       <div className='width100'>
-        <h1 className='absolute-center'>Data Visualisation</h1>
+        <h1 className='MainHeading'>Analytics Dashboard</h1>
 
         <div>
           <DataVisualisation />
