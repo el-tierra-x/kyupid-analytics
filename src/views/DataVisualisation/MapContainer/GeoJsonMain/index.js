@@ -32,7 +32,7 @@ class GeoJsonMain extends React.PureComponent {
 
                   const areaData = processedData[ areaId ];
 
-                  layer.bindPopup(
+                  layer.bindTooltip(
                     `<h3 class = "infoboxHeader">User Data</h3><TABLE BORDER="1" CELLSPACING="1" WIDTH="300 COlOR="Green"">
                     <TR><TD BGCOLOR="#70F989">Area Name</TD> <TD>${feature?.properties?.name}</TD></TR>
                      <TR><TD BGCOLOR="#70F989">Total Users</TD> <TD>${areaData?.totalUsers}</TD></TR>
