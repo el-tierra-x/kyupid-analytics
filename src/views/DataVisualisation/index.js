@@ -1,15 +1,19 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 
-import { MapContainer, TileLayer } from "react-leaflet";
-
+import { CircularProgress } from '@mui/material'
 
 import "leaflet/dist/leaflet.css";
 
 import { getAllUsersDataApi, getGeoJsonDataApi } from '../../utils/api';
-
-import GeoJsonMain from './GeoJsonMain';
 import { parseUserData } from '../../utils/helpers';
+
+import MapContainer from './MapContainer';
+import TopView from './TopView';
+import TopAreas from './TopAreas';
+import TopProAreas from './TopProAreas';
+import TopMatches from './TopMatches';
+
 
 
 class DataVisualisation extends React.PureComponent {
@@ -24,7 +28,7 @@ class DataVisualisation extends React.PureComponent {
       isLoading: false,
       isError: false
     },
-    processedData: {},
+    processedAreaData: {},
     isProcessingData: true
   }
 
@@ -35,33 +39,44 @@ class DataVisualisation extends React.PureComponent {
 
 
   render() {
-    const { geoData: { data }, processedData } = this.state
+    const { geoData: { data, isLoading }, processedAreaData, userData } = this.state;
 
-    if (isEmpty(data) || isEmpty(processedData)) {
+
+    if (isLoading || userData?.isLoading || isEmpty(processedAreaData)) {
+      return (
+        <div className='absolute-center' style={{ marginTop: '20%' }}>
+          <CircularProgress />
+        </div>
+      );
+    }
+
+    if (isEmpty(data) || isEmpty(processedAreaData)) {
       return null;
     }
 
-    // const bboxArray = bbox(data);
-    // const corner1 = [ bboxArray[ 1 ], bboxArray[ 0 ] ];
-    // const corner2 = [ bboxArray[ 3 ], bboxArray[ 2 ] ];
-    // // const mapBounds = [ corner1, corner2 ];
-
     return (
       <div>
-        <MapContainer
-          center={[ 12.97, 77.59 ]}
-          zoom={11}
-          zoomControl={true}
-          style={{ height: '100vh', width: '100%' }}
-        >
-          <TileLayer
-            attribution='Data by &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {/* <ZoomControl position='topright' /> */}
-          <GeoJsonMain data={data} processedData={processedData} />
-        </MapContainer>
-      </div >
+        <TopView processedAreaData={processedAreaData} />
+
+        <div>
+          <TopAreas name="Top Areas" processedAreaData={processedAreaData} geoJsonData={data} sortByValue="totalUsers" />
+        </div>
+
+        <div>
+          <TopProAreas name="Top Areas by Pro Users" processedAreaData={processedAreaData} geoJsonData={data} sortByValue="proUsers" />
+        </div>
+
+        <div>
+          <TopMatches name="Top Areas with Matches" processedAreaData={processedAreaData} geoJsonData={data} sortByValue="totalMatches" />
+        </div>
+
+        <div style={{ marginTop: 50, padding: 20 }} className='white-background'>
+          <div className='fs24 fw600'>Overall Data by Maps</div>
+          <div style={{ padding: 16 }} >
+            <MapContainer data={data} processedData={processedAreaData?.areaWiseData} />
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -131,10 +146,10 @@ class DataVisualisation extends React.PureComponent {
   processUserSpecificData = () => {
     const { userData: { data } } = this.state;
 
-    const processedData = parseUserData(data?.users);
+    const processedAreaData = parseUserData(data?.users);
 
     this.setState({
-      processedData,
+      processedAreaData,
       isProcessingData: true
     })
   }

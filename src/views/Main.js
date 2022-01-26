@@ -1,5 +1,9 @@
 import React from 'react';
+
+import Box from '@mui/material/Box';
+
 import DataVisualisation from './DataVisualisation';
+import Navigator from './Navigator'
 
 import './main.css'
 
@@ -8,9 +12,9 @@ class Main extends React.PureComponent {
   render() {
     return (
       <div className='width100'>
-        <h1 className='MainHeading'>Analytics Dashboard</h1>
+        <Navigator />
 
-        <div>
+        <div className='MainCont'>
           <DataVisualisation />
         </div>
       </div>
